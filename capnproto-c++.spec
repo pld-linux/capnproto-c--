@@ -13,7 +13,9 @@ Group:		Libraries
 Source0:	https://capnproto.org/%{name}-%{version}.tar.gz
 # Source0-md5:	da2a4ccc521e7af7752ec4e2ea4ee951
 URL:		https://capnproto.org/
+BuildRequires:	cmake >= 3.1
 BuildRequires:	libstdc++-devel >= 6:4.7
+BuildRequires:	rpmbuild(macros) >= 1.605
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -55,6 +57,12 @@ Statyczne biblioteki Cap'n Proto.
 %setup -q
 
 %build
+# initialize cmake to generate CapnProtoTargets files
+install -d build-cmake
+cd build-cmake
+%cmake ..
+cd ..
+# but use autotools (cmake doesn't use library sonames)
 %configure \
 	%{!?with_static_libs:--disable-static}
 %{__make}
@@ -67,6 +75,14 @@ rm -rf $RPM_BUILD_ROOT
 
 # obsoleted by pkg-config
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/lib*.la
+
+# cmake support (omitted when installing using autotools)
+# (note: cmake install seems to omit necessary FindCapnProto.cmake file)
+install -d $RPM_BUILD_ROOT{%{_libdir}/cmake/CapnProto,%{_datadir}/cmake/Modules}
+cp -p cmake/FindCapnProto.cmake $RPM_BUILD_ROOT%{_datadir}/cmake/Modules
+cp -p cmake/Capn*.cmake $RPM_BUILD_ROOT%{_libdir}/cmake/CapnProto
+cp -p build-cmake/cmake/CapnProtoConfig*.cmake $RPM_BUILD_ROOT%{_libdir}/cmake/CapnProto
+cp -p build-cmake/CMakeFiles/Export/_usr/%{_lib}/cmake/CapnProto/CapnProtoTargets*.cmake $RPM_BUILD_ROOT%{_libdir}/cmake/CapnProto
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -106,6 +122,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_pkgconfigdir}/capnp-rpc.pc
 %{_pkgconfigdir}/kj.pc
 %{_pkgconfigdir}/kj-async.pc
+%{_libdir}/cmake/CapnProto
+%{_datadir}/cmake/Modules/FindCapnProto.cmake
 
 %if %{with static_libs}
 %files static
