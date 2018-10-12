@@ -5,16 +5,16 @@
 Summary:	Cap'n Proto - Insanely Fast Data Serialization Format
 Summary(pl.UTF-8):	Cap'n Proto - szaleńczo szybki format serializacji danych
 Name:		capnproto-c++
-Version:	0.6.1
+Version:	0.7.0
 Release:	1
 License:	MIT
 Group:		Libraries
 #Source0Download: https://capnproto.org/install.html
 Source0:	https://capnproto.org/%{name}-%{version}.tar.gz
-# Source0-md5:	d48846a72abe327b44e258bd46294d1e
+# Source0-md5:	3819c36c0fbafe29d466d486ffb71cfa
 URL:		https://capnproto.org/
-BuildRequires:	cmake >= 3.1
-BuildRequires:	libstdc++-devel >= 6:4.7
+BuildRequires:	libstdc++-devel >= 6:5.0
+BuildRequires:	openssl-devel
 BuildRequires:	rpmbuild(macros) >= 1.605
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -57,12 +57,6 @@ Statyczne biblioteki Cap'n Proto.
 %setup -q
 
 %build
-# initialize cmake to generate CapnProtoTargets files
-install -d build-cmake
-cd build-cmake
-%cmake ..
-cd ..
-# but use autotools (cmake doesn't use library sonames)
 %configure \
 	%{!?with_static_libs:--disable-static}
 %{__make}
@@ -75,14 +69,6 @@ rm -rf $RPM_BUILD_ROOT
 
 # obsoleted by pkg-config
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/lib*.la
-
-# cmake support (omitted when installing using autotools)
-# (note: cmake install seems to omit necessary FindCapnProto.cmake file)
-install -d $RPM_BUILD_ROOT{%{_libdir}/cmake/CapnProto,%{_datadir}/cmake/Modules}
-cp -p cmake/FindCapnProto.cmake $RPM_BUILD_ROOT%{_datadir}/cmake/Modules
-cp -p cmake/Capn*.cmake $RPM_BUILD_ROOT%{_libdir}/cmake/CapnProto
-cp -p build-cmake/cmake/CapnProtoConfig*.cmake $RPM_BUILD_ROOT%{_libdir}/cmake/CapnProto
-cp -p build-cmake/CMakeFiles/Export/_usr/%{_lib}/cmake/CapnProto/CapnProtoTargets*.cmake $RPM_BUILD_ROOT%{_libdir}/cmake/CapnProto
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -105,6 +91,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libkj-async-%{version}.so
 %attr(755,root,root) %{_libdir}/libkj-http-%{version}.so
 %attr(755,root,root) %{_libdir}/libkj-test-%{version}.so
+%attr(755,root,root) %{_libdir}/libkj-tls-%{version}.so
 
 %files devel
 %defattr(644,root,root,755)
@@ -116,14 +103,17 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libkj-async.so
 %attr(755,root,root) %{_libdir}/libkj-http.so
 %attr(755,root,root) %{_libdir}/libkj-test.so
+%attr(755,root,root) %{_libdir}/libkj-tls.so
 %{_includedir}/capnp
 %{_includedir}/kj
 %{_pkgconfigdir}/capnp.pc
+%{_pkgconfigdir}/capnp-json.pc
 %{_pkgconfigdir}/capnp-rpc.pc
 %{_pkgconfigdir}/kj.pc
 %{_pkgconfigdir}/kj-async.pc
+%{_pkgconfigdir}/kj-http.pc
+%{_pkgconfigdir}/kj-test.pc
 %{_libdir}/cmake/CapnProto
-%{_datadir}/cmake/Modules/FindCapnProto.cmake
 
 %if %{with static_libs}
 %files static
@@ -136,4 +126,5 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libkj-async.a
 %{_libdir}/libkj-http.a
 %{_libdir}/libkj-test.a
+%{_libdir}/libkj-tls.a
 %endif
