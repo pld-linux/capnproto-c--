@@ -5,17 +5,18 @@
 Summary:	Cap'n Proto - Insanely Fast Data Serialization Format
 Summary(pl.UTF-8):	Cap'n Proto - szaleńczo szybki format serializacji danych
 Name:		capnproto-c++
-Version:	0.7.0
-Release:	2
+Version:	0.10.2
+Release:	1
 License:	MIT
 Group:		Libraries
 #Source0Download: https://capnproto.org/install.html
 Source0:	https://capnproto.org/%{name}-%{version}.tar.gz
-# Source0-md5:	3819c36c0fbafe29d466d486ffb71cfa
+# Source0-md5:	ad28fe62ca7f0fd784f7d80874d0eed4
 URL:		https://capnproto.org/
 BuildRequires:	libstdc++-devel >= 6:5.0
 BuildRequires:	openssl-devel
 BuildRequires:	rpmbuild(macros) >= 1.605
+BuildRequires:	zlib-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -33,7 +34,7 @@ Summary:	Header files for Cap'n Proto libraries
 Summary(pl.UTF-8):	Pliki nagłówkowe bibliotek Cap'n Proto
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	libstdc++-devel >= 6:4.7
+Requires:	libstdc++-devel >= 6:5.0
 
 %description devel
 Header files for Cap'n Proto libraries.
@@ -86,9 +87,11 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libcapnp-%{version}.so
 %attr(755,root,root) %{_libdir}/libcapnp-json-%{version}.so
 %attr(755,root,root) %{_libdir}/libcapnp-rpc-%{version}.so
+%attr(755,root,root) %{_libdir}/libcapnp-websocket-%{version}.so
 %attr(755,root,root) %{_libdir}/libcapnpc-%{version}.so
 %attr(755,root,root) %{_libdir}/libkj-%{version}.so
 %attr(755,root,root) %{_libdir}/libkj-async-%{version}.so
+%attr(755,root,root) %{_libdir}/libkj-gzip-%{version}.so
 %attr(755,root,root) %{_libdir}/libkj-http-%{version}.so
 %attr(755,root,root) %{_libdir}/libkj-test-%{version}.so
 %attr(755,root,root) %{_libdir}/libkj-tls-%{version}.so
@@ -98,9 +101,11 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libcapnp.so
 %attr(755,root,root) %{_libdir}/libcapnp-json.so
 %attr(755,root,root) %{_libdir}/libcapnp-rpc.so
+%attr(755,root,root) %{_libdir}/libcapnp-websocket.so
 %attr(755,root,root) %{_libdir}/libcapnpc.so
 %attr(755,root,root) %{_libdir}/libkj.so
 %attr(755,root,root) %{_libdir}/libkj-async.so
+%attr(755,root,root) %{_libdir}/libkj-gzip.so
 %attr(755,root,root) %{_libdir}/libkj-http.so
 %attr(755,root,root) %{_libdir}/libkj-test.so
 %attr(755,root,root) %{_libdir}/libkj-tls.so
@@ -109,10 +114,14 @@ rm -rf $RPM_BUILD_ROOT
 %{_pkgconfigdir}/capnp.pc
 %{_pkgconfigdir}/capnp-json.pc
 %{_pkgconfigdir}/capnp-rpc.pc
+%{_pkgconfigdir}/capnp-websocket.pc
+%{_pkgconfigdir}/capnpc.pc
 %{_pkgconfigdir}/kj.pc
 %{_pkgconfigdir}/kj-async.pc
+%{_pkgconfigdir}/kj-gzip.pc
 %{_pkgconfigdir}/kj-http.pc
 %{_pkgconfigdir}/kj-test.pc
+%{_pkgconfigdir}/kj-tls.pc
 %{_libdir}/cmake/CapnProto
 
 %if %{with static_libs}
@@ -121,9 +130,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libcapnp.a
 %{_libdir}/libcapnp-json.a
 %{_libdir}/libcapnp-rpc.a
+%{_libdir}/libcapnp-websocket.a
 %{_libdir}/libcapnpc.a
 %{_libdir}/libkj.a
 %{_libdir}/libkj-async.a
+%{_libdir}/libkj-gzip.a
 %{_libdir}/libkj-http.a
 %{_libdir}/libkj-test.a
 %{_libdir}/libkj-tls.a
