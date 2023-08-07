@@ -5,7 +5,7 @@
 Summary:	Cap'n Proto - Insanely Fast Data Serialization Format
 Summary(pl.UTF-8):	Cap'n Proto - szaleńczo szybki format serializacji danych
 Name:		capnproto-c++
-Version:	0.10.3
+Version:	1.0.0
 Release:	1
 License:	MIT
 Group:		Libraries
