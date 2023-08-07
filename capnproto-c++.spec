@@ -11,7 +11,7 @@ License:	MIT
 Group:		Libraries
 #Source0Download: https://capnproto.org/install.html
 Source0:	https://capnproto.org/%{name}-%{version}.tar.gz
-# Source0-md5:	d0ccca2e83ca9e65081fee17ceeab815
+# Source0-md5:	05987ecae0d568fc9cc129f4a646ca13
 URL:		https://capnproto.org/
 BuildRequires:	libstdc++-devel >= 6:5.0
 BuildRequires:	openssl-devel
